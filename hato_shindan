@@ -319,7 +319,7 @@
 
 <script>
 // ★ GASデプロイ後にURLを貼り替えてください
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxCU_YtfgjnHzXjBioxwkgFsQJ9pbl40vwR03PZVjf-Nho4nhkhzu8VK8jhG4xUCug4Tg/exec/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxCU_YtfgjnHzXjBioxwkgFsQJ9pbl40vwR03PZVjf-Nho4nhkhzu8VK8jhG4xUCug4Tg/exec/';
 
 // --- 状態管理 ---
 let selectedFile = null;
