@@ -130,4 +130,370 @@
   .radio-btn label { display:block; text-align:center; padding:11px 8px; border:1px solid var(--navy-light); border-radius:8px; font-size:13px; cursor:pointer; transition:border-color 0.2s,background 0.2s; }
   .radio-btn input:checked + label { border-color:var(--orange); background:rgba(232,98,26,0.15); color:#fff; }
 
-  #complete-section {
+  #complete-section { display:none; text-align:center; padding:40px 20px; }
+  .complete-icon { font-size:60px; margin-bottom:16px; }
+  #complete-section h2 { font-size:20px; font-weight:700; margin-bottom:10px; }
+  #complete-section p { font-size:14px; color:var(--gray); line-height:1.8; margin-bottom:24px; }
+
+  #error-area { display:none; background:rgba(231,76,60,0.15); border:1px solid var(--danger); border-radius:10px; padding:18px; margin-bottom:20px; text-align:center; font-size:14px; line-height:1.7; }
+
+  .cta-box { background:linear-gradient(135deg,var(--navy-mid),var(--navy-light)); border:1px solid var(--orange); border-radius:12px; padding:22px 20px; text-align:center; margin-bottom:20px; }
+  .cta-box h3 { font-size:15px; margin-bottom:6px; }
+  .cta-box p { font-size:13px; color:var(--gray); margin-bottom:16px; line-height:1.6; }
+  .btn-cta { display:block; background:linear-gradient(135deg,var(--orange),var(--orange-light)); color:#fff; text-decoration:none; border-radius:10px; padding:16px; font-size:16px; font-weight:700; transition:opacity 0.2s; }
+  .btn-cta:hover { opacity:0.9; }
+
+  .footer { text-align:center; font-size:11px; color:var(--gray); padding:16px; border-top:1px solid var(--navy-light); margin-top:8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">AI powered</div>
+  <h1>ハト被害 <span>無料AI診断</span></h1>
+</div>
+
+<div class="container">
+
+  <div class="steps">
+    <div class="step active" id="s1"><span class="num">1</span>写真を選ぶ</div>
+    <div class="step" id="s2"><span class="num">2</span>AI診断</div>
+    <div class="step" id="s3"><span class="num">3</span>状況を入力</div>
+    <div class="step" id="s4"><span class="num">4</span>完了</div>
+  </div>
+
+  <div id="upload-section">
+
+    <!-- ② AI診断でわかること -->
+    <div class="value-box">
+      <div class="value-box-title">📊 AI診断でわかること</div>
+      <div class="value-grid">
+        <div class="value-item">
+          <span class="vi-icon">🎯</span>
+          <div class="vi-label">被害レベル</div>
+          <div class="vi-desc">軽度〜重度を3段階で判定</div>
+        </div>
+        <div class="value-item">
+          <span class="vi-icon">⚠️</span>
+          <div class="vi-label">放置リスク</div>
+          <div class="vi-desc">悪化した場合の影響を説明</div>
+        </div>
+        <div class="value-item">
+          <span class="vi-icon">🛡️</span>
+          <div class="vi-label">おすすめ対策</div>
+          <div class="vi-desc">状況に合った対策を提案</div>
+        </div>
+        <div class="value-item">
+          <span class="vi-icon">💰</span>
+          <div class="vi-label">概算費用</div>
+          <div class="vi-desc">対策の目安費用をご案内</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ 安心バッジ -->
+    <div class="trust-bar">
+      <div class="trust-badge">🔒 個人情報は第三者に提供しません</div>
+      <div class="trust-badge">🗑️ 写真は診断後に自動削除</div>
+      <div class="trust-badge">🏆 累計施工実績 1,000件以上</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📷 被害写真をアップロード</div>
+      <div class="upload-zone" id="drop-zone">
+        <input type="file" id="file-input" accept="image/*">
+        <span class="upload-icon">🐦</span>
+        <div class="upload-title">写真をタップして選択</div>
+        <div class="upload-sub">ベランダ・屋上・軒下など<br>ハトやフンが写っている写真をお送りください</div>
+        <div class="upload-hint">📱 カメラ撮影・保存済み写真どちらもOK｜JPEG/PNG/HEIC・最大10MB</div>
+      </div>
+      <div id="preview-wrap">
+        <img id="preview-img" src="" alt="選択した写真">
+        <button class="preview-reset" id="reset-photo">×</button>
+      </div>
+
+      <!-- ① 強化CTAボタン -->
+      <button class="btn-cta-main" id="diagnose-btn" disabled>
+        🔍 無料でAI診断する（30秒）
+      </button>
+      <p class="btn-sub-note">登録不要・完全無料・写真は診断後に削除されます</p>
+    </div>
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>AIが写真を解析中です…<br>被害状況・推奨対策を判定しています</p>
+  </div>
+
+  <div id="error-area"></div>
+
+  <div id="result-section">
+    <div id="result-level-bar" class="level-bar lv-mid">
+      <div class="level-icon" id="result-icon">🟡</div>
+      <div>
+        <div class="level-label-sm">被害レベル判定</div>
+        <div class="level-title" id="result-level-text">中度</div>
+      </div>
+    </div>
+    <div class="result-body">
+      <div class="rsec">
+        <div class="rsec-title">📋 状況説明</div>
+        <p id="result-status"></p>
+      </div>
+      <div class="rsec">
+        <div class="rsec-title">🛡️ 推奨対策</div>
+        <ul class="measures" id="result-measures"></ul>
+      </div>
+      <div class="rsec">
+        <div class="rsec-title">💬 専門家からのアドバイス</div>
+        <div class="advice-box" id="result-advice"></div>
+      </div>
+    </div>
+    <button class="btn-primary" id="to-form-btn">📝 詳細を入力して無料見積もりへ</button>
+    <button class="btn-secondary" id="retry-btn">別の写真で診断し直す</button>
+  </div>
+
+  <div id="form-section">
+    <div class="card">
+      <div class="card-title">📝 詳細情報の入力（無料見積もり依頼）</div>
+      <div class="form-group">
+        <label class="form-label">被害のある場所<span class="req">必須</span></label>
+        <select class="form-control" id="f-place">
+          <option value="">選択してください</option>
+          <option>ベランダ・バルコニー</option>
+          <option>屋上</option>
+          <option>駐車場・カーポート</option>
+          <option>軒下・庇</option>
+          <option>太陽光パネル周辺</option>
+          <option>看板・外壁</option>
+          <option>その他</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">建物の種類<span class="req">必須</span></label>
+        <div class="radio-group">
+          <div class="radio-btn"><input type="radio" name="building" id="b1" value="マンション・アパート"><label for="b1">マンション<br>アパート</label></div>
+          <div class="radio-btn"><input type="radio" name="building" id="b2" value="一戸建て"><label for="b2">一戸建て</label></div>
+          <div class="radio-btn"><input type="radio" name="building" id="b3" value="工場・倉庫"><label for="b3">工場・倉庫</label></div>
+          <div class="radio-btn"><input type="radio" name="building" id="b4" value="オフィスビル"><label for="b4">オフィス<br>ビル</label></div>
+          <div class="radio-btn"><input type="radio" name="building" id="b5" value="その他"><label for="b5">その他</label></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">被害が始まった時期<span class="req">必須</span></label>
+        <select class="form-control" id="f-period">
+          <option value="">選択してください</option>
+          <option>1ヶ月以内</option>
+          <option>3ヶ月以内</option>
+          <option>半年以内</option>
+          <option>1年以内</option>
+          <option>1年以上前</option>
+          <option>わからない</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">過去に対策したことがありますか？</label>
+        <div class="radio-group">
+          <div class="radio-btn"><input type="radio" name="past" id="p1" value="なし"><label for="p1">なし</label></div>
+          <div class="radio-btn"><input type="radio" name="past" id="p2" value="市販品を試した"><label for="p2">市販品を<br>試した</label></div>
+          <div class="radio-btn"><input type="radio" name="past" id="p3" value="業者に依頼した"><label for="p3">業者に<br>依頼した</label></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">都道府県・市区町村<span class="req">必須</span></label>
+        <input type="text" class="form-control" id="f-address" placeholder="例：千葉県香取市、茨城県神栖市">
+      </div>
+      <div class="form-group">
+        <label class="form-label">お名前<span class="req">必須</span></label>
+        <input type="text" class="form-control" id="f-name" placeholder="例：山田 太郎">
+      </div>
+      <div class="form-group">
+        <label class="form-label">電話番号<span class="req">必須</span></label>
+        <input type="tel" class="form-control" id="f-tel" placeholder="例：090-0000-0000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">メールアドレス</label>
+        <input type="email" class="form-control" id="f-email" placeholder="例：example@gmail.com">
+      </div>
+      <button class="btn-primary" id="submit-btn">📩 無料見積もりを依頼する</button>
+      <p class="btn-note">送信後、担当者よりご連絡いたします。</p>
+    </div>
+  </div>
+
+  <div id="complete-section">
+    <div class="complete-icon">✅</div>
+    <h2>送信が完了しました！</h2>
+    <p>お問い合わせありがとうございます。<br>内容を確認のうえ、担当者より<br>1〜2営業日以内にご連絡いたします。</p>
+    <div class="cta-box">
+      <h3>お急ぎの場合はお電話ください</h3>
+      <p>平日 9:00〜17:00 対応</p>
+      <a href="tel:0120-280-557" class="btn-cta">📞 今すぐ電話する</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  日本鳩対策センター 千葉・茨城 ／ Prostyle株式会社<br>
+  ※ AI診断は参考情報です。正確な判定は現地調査にてご確認ください。
+</div>
+
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxJJCVGsrzd-Xe89MxYKV6G5RO_eAQjUOrutxWlLOKTptM5-I9C1prvJj1uPQC_SiBKvQ/exec';
+
+let selectedFile = null;
+let diagnosisResult = null;
+
+const $ = id => document.getElementById(id);
+const fileInput   = $('file-input');
+const dropZone    = $('drop-zone');
+const previewWrap = $('preview-wrap');
+const previewImg  = $('preview-img');
+const diagnoseBtn = $('diagnose-btn');
+const loading     = $('loading');
+const errorArea   = $('error-area');
+const uploadSec   = $('upload-section');
+const resultSec   = $('result-section');
+const formSec     = $('form-section');
+const completeSec = $('complete-section');
+
+function setStep(n) {
+  ['s1','s2','s3','s4'].forEach((id,i) => $(id).classList.toggle('active', i+1 <= n));
+}
+
+fileInput.addEventListener('change', e => { if(e.target.files[0]) handleFile(e.target.files[0]); });
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if(f && f.type.startsWith('image/')) handleFile(f);
+});
+
+function handleFile(file) {
+  if(file.size > 10*1024*1024) { alert('ファイルサイズが大きすぎます（上限10MB）'); return; }
+  selectedFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    previewImg.src = e.target.result;
+    previewWrap.style.display = 'block';
+    dropZone.style.display = 'none';
+    diagnoseBtn.disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+function resetAll() {
+  selectedFile = null; diagnosisResult = null;
+  previewImg.src = ''; previewWrap.style.display='none';
+  dropZone.style.display='block'; diagnoseBtn.disabled=true;
+  fileInput.value=''; errorArea.style.display='none';
+  uploadSec.style.display='block'; resultSec.style.display='none';
+  formSec.style.display='none'; completeSec.style.display='none';
+  loading.style.display='none';
+  setStep(1);
+}
+$('reset-photo').addEventListener('click', resetAll);
+$('retry-btn').addEventListener('click', resetAll);
+
+diagnoseBtn.addEventListener('click', async () => {
+  if(!selectedFile) return;
+  uploadSec.style.display='none';
+  loading.style.display='block';
+  errorArea.style.display='none';
+  setStep(2);
+  try {
+    const base64 = await toBase64(selectedFile);
+    const formData = new FormData();
+    formData.append('payload', JSON.stringify({
+      action: 'diagnose',
+      image: base64,
+      mimeType: selectedFile.type || 'image/jpeg'
+    }));
+    const res = await fetch(GAS_URL, { method: 'POST', body: formData });
+    if(!res.ok) throw new Error('通信エラー: '+res.status);
+    const data = await res.json();
+    if(data.error) throw new Error(data.error);
+    diagnosisResult = data;
+    showResult(data);
+  } catch(err) {
+    loading.style.display='none';
+    errorArea.style.display='block';
+    errorArea.textContent='診断中にエラーが発生しました。しばらくしてから再度お試しください。（'+err.message+'）';
+    uploadSec.style.display='block';
+    setStep(1);
+  }
+});
+
+function showResult(data) {
+  loading.style.display='none';
+  resultSec.style.display='block';
+  setStep(2);
+  const bar = $('result-level-bar');
+  bar.className = 'level-bar';
+  const lv = data.level||'中度';
+  if(lv.includes('軽')) { bar.classList.add('lv-light'); $('result-icon').textContent='🟢'; $('result-level-text').textContent='軽度'; }
+  else if(lv.includes('重')||lv.includes('緊急')) { bar.classList.add('lv-heavy'); $('result-icon').textContent='🔴'; $('result-level-text').textContent='重度'; }
+  else { bar.classList.add('lv-mid'); $('result-icon').textContent='🟡'; $('result-level-text').textContent='中度'; }
+  $('result-status').textContent = data.status||'';
+  const ul = $('result-measures'); ul.innerHTML='';
+  (data.measures||[]).forEach(m => { const li=document.createElement('li'); li.textContent=m; ul.appendChild(li); });
+  $('result-advice').textContent = data.advice||'';
+  resultSec.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+$('to-form-btn').addEventListener('click', () => {
+  resultSec.style.display='none';
+  formSec.style.display='block';
+  setStep(3);
+  formSec.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+$('submit-btn').addEventListener('click', async () => {
+  const place    = $('f-place').value;
+  const building = document.querySelector('input[name="building"]:checked')?.value||'';
+  const period   = $('f-period').value;
+  const past     = document.querySelector('input[name="past"]:checked')?.value||'未回答';
+  const address  = $('f-address').value.trim();
+  const name     = $('f-name').value.trim();
+  const tel      = $('f-tel').value.trim();
+  const email    = $('f-email').value.trim();
+  if(!place||!building||!period||!address||!name||!tel) {
+    alert('必須項目（場所・建物種類・被害期間・住所・お名前・電話番号）を入力してください。');
+    return;
+  }
+  $('submit-btn').disabled=true;
+  $('submit-btn').textContent='送信中…';
+  try {
+    const formData = new FormData();
+    formData.append('payload', JSON.stringify({
+      action: 'save',
+      diagnosis: diagnosisResult,
+      form: { place, building, period, past, address, name, tel, email }
+    }));
+    const res = await fetch(GAS_URL, { method: 'POST', body: formData });
+    if(!res.ok) throw new Error('通信エラー: '+res.status);
+    const data = await res.json();
+    if(data.error) throw new Error(data.error);
+    formSec.style.display='none';
+    completeSec.style.display='block';
+    setStep(4);
+    completeSec.scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(err) {
+    alert('送信に失敗しました。お手数ですが電話にてお問い合わせください。\n（'+err.message+'）');
+    $('submit-btn').disabled=false;
+    $('submit-btn').textContent='📩 無料見積もりを依頼する';
+  }
+});
+
+function toBase64(file) {
+  return new Promise((resolve,reject) => {
+    const r=new FileReader();
+    r.onload=()=>resolve(r.result.split(',')[1]);
+    r.onerror=reject;
+    r.readAsDataURL(file);
+  });
+}
+</script>
+</body>
+</html>
