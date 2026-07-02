@@ -656,8 +656,18 @@
         <label class="form-label">メールアドレス</label>
         <input type="email" class="form-control" id="f-email" placeholder="例：example@gmail.com">
       </div>
+      <div style="background:#f4f6fa; border-radius:10px; padding:14px 16px; margin-bottom:14px; border:1px solid #e0e5f0;">
+        <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:13px; color:#3a4a6b; line-height:1.7;">
+          <input type="checkbox" id="privacy-check" style="width:18px; height:18px; margin-top:2px; flex-shrink:0; accent-color:#e8621a;">
+          <span>
+            <a href="./privacy.html" target="_blank" style="color:#e8621a; text-decoration:underline;">プライバシーポリシー</a>
+            を読み、個人情報の取り扱いに同意します。
+          </span>
+        </label>
+      </div>
       <button class="btn-primary" id="submit-btn">📩 無料見積もりを依頼する</button>
       <p class="btn-note">送信後、担当者よりご連絡いたします。</p>
+      
 <p style="text-align:center; font-size:11px; color:#6b7a99; margin-top:12px; line-height:1.8;">
   送信することで
   <a href="./privacy.html" target="_blank" style="color:#e8621a;">プライバシーポリシー</a>
@@ -808,6 +818,10 @@ $('submit-btn').addEventListener('click', async () => {
   const email    = $('f-email').value.trim();
   if(!place||!building||!period||!address||!name||!tel) {
     alert('必須項目（場所・建物種類・被害期間・住所・お名前・電話番号）を入力してください。');
+    return;
+  }
+  if(!$('privacy-check').checked) {
+    alert('プライバシーポリシーへの同意をお願いします。');
     return;
   }
   $('submit-btn').disabled=true;
